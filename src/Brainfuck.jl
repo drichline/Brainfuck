@@ -1,57 +1,60 @@
 
 # input::String = readline()
 
-input::String = "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++."
+input::String = "++++++++>+++."
 # input::String = ""
 
 function interpret(input::String)
-    memory = zeros(UInt8,65535)
-    pointer::Int = 1
-    index::Int = 
-    for character in input
-        if character == '>'
-           pointer += 1
-           if pointer == length(memory) + 1
-                pointer = 1
+    memory = zeros(UInt8,5)
+    instPtr::Int = 1
+    dataPtr::Int = 1
+    while instPtr < length(memory)
+        command = memory[instPtr]
+        if command == '>'
+           dataPtr += 1
+           if dataPtr == length(memory) + 1
+                dataPtr = 1
            end
         end
 
-        if character == '<'
-           pointer -= 1
-           if pointer == 0
-                pointer = length(memory)
+        if command == '<'
+           dataPtr -= 1
+           if dataPtr == 0
+                dataPtr = length(memory)
            end
         end
 
-        if character == '+'
-            memory[pointer] += 1
+        if command == '+'
+            memory[dataPtr] += 1
         end
 
-        if character == '-'
-            memory[pointer] -= 1
+        if command == '-'
+            memory[dataPtr] -= 1
         end
 
-        if character == '.'
-            print(Char(memory[pointer]))
+        if command == '.'
+            print(Char(memory[dataPtr]))
         end
 
-        if character == '['
-            if memory[pointer] == 0
-                while memory[pointer] != ']'
-                    pointer += 1
+        if command == '['
+            if memory[dataPtr] == 0
+                while memory[dataPtr] != ']'
+                    instPtr += 1
                 end
-                pointer += 1
+                instPtr += 1
             end
         end
 
-        if character == ']'
-            if memory[pointer] != 0
-                while memory[pointer] != '['
-                    pointer -= 1
+        if command == ']'
+            if memory[dataPtr] != 0
+                while memory[dataPtr] != '['
+                    instPtr -= 1
                 end
-                pointer -= 1
+                instPtr -= 1
             end
         end
+        instPtr += 1
+
     end
     print(memory)
 end
